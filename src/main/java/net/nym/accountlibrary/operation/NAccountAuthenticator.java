@@ -17,6 +17,7 @@ import android.accounts.AccountAuthenticatorResponse;
 import android.accounts.NetworkErrorException;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 
 /**
  * @author niyueming
@@ -24,44 +25,51 @@ import android.os.Bundle;
  * @time 10:54
  */
 
-public class AccountAuthenticator extends AbstractAccountAuthenticator {
-
-    public AccountAuthenticator(Context context) {
+public abstract class NAccountAuthenticator extends AbstractAccountAuthenticator {
+    private final String TAG = NAccountAuthenticator.class.getSimpleName();
+    public NAccountAuthenticator(Context context) {
         super(context);
     }
 
     @Override
     public Bundle editProperties(AccountAuthenticatorResponse response, String accountType) {
-        return null;
+        Log.v(TAG,"editProperties");
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public Bundle addAccount(AccountAuthenticatorResponse response, String accountType, String authTokenType, String[] requiredFeatures, Bundle options) throws NetworkErrorException {
+        Log.v(TAG,"addAccount");
         return null;
     }
 
     @Override
     public Bundle confirmCredentials(AccountAuthenticatorResponse response, Account account, Bundle options) throws NetworkErrorException {
+        Log.v(TAG,"confirmCredentials");
         return null;
     }
 
     @Override
     public Bundle getAuthToken(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+        Log.v(TAG,"getAuthToken");
         return null;
     }
 
     @Override
     public String getAuthTokenLabel(String authTokenType) {
+        Log.v(TAG,"getAuthTokenLabel");
         return null;
     }
 
     @Override
     public Bundle updateCredentials(AccountAuthenticatorResponse response, Account account, String authTokenType, Bundle options) throws NetworkErrorException {
+        Log.v(TAG,"updateCredentials");
         return null;
     }
 
     @Override
     public Bundle hasFeatures(AccountAuthenticatorResponse response, Account account, String[] features) throws NetworkErrorException {
+        Log.v(TAG,"hasFeatures");
         return null;
     }
 }
