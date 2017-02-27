@@ -11,6 +11,16 @@
 
 package net.nym.accountlibrary;
 
+import android.Manifest;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.annotation.RequiresPermission;
+import android.support.v4.app.ActivityCompat;
+
+import static android.Manifest.permission.GET_ACCOUNTS;
+
 /**
  * @author niyueming
  * @date 2017-02-24
@@ -18,4 +28,44 @@ package net.nym.accountlibrary;
  */
 
 public class AccountUtils {
+
+    public static AccountManager getAccountManager(Context context) {
+        return AccountManager.get(context);
+    }
+
+    /**
+     * 获取当前设备所有的账户信息
+     * 需要检测获取权限 {@link android.Manifest.permission#GET_ACCOUNTS}
+     * @param context
+     * @return
+     */
+    @RequiresPermission(GET_ACCOUNTS)
+    public static Account[] getAccounts(Context context) {
+        AccountManager accountManager = AccountManager.get(context);
+        try {
+            return accountManager.getAccounts();
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * 获取自己或者特定的账户信息
+     * 需要检测获取权限 {@link android.Manifest.permission#GET_ACCOUNTS}
+     * @param context
+     * @param type
+     * @return
+     */
+    @RequiresPermission(GET_ACCOUNTS)
+    public static Account[] getAccountsByType(Context context,String type) {
+        AccountManager accountManager = AccountManager.get(context);
+        try {
+            return accountManager.getAccountsByType(type);
+        }catch (SecurityException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
