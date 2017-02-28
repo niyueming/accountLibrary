@@ -25,6 +25,7 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
+import static android.Manifest.permission.WRITE_SYNC_SETTINGS;
 
 /**
  * @author niyueming
@@ -76,7 +77,6 @@ public class AccountUtils {
 
     /**
      * 添加账户
-     * 需要检测获取权限 {@link android.Manifest.permission#GET_ACCOUNTS}
      * @param context
      * @param type
      * @return
@@ -89,7 +89,6 @@ public class AccountUtils {
 
     /**
      * 添加账户
-     * 需要检测获取权限 {@link android.Manifest.permission#GET_ACCOUNTS}
      * @param context
      * @return
      */
@@ -141,6 +140,7 @@ public class AccountUtils {
      * @param account
      * @param authority 例：{@link ContactsContract#AUTHORITY} 同步通讯录
      */
+    @RequiresPermission(WRITE_SYNC_SETTINGS)
     public static void setSyncAutomatically(Account account,String authority){
         ContentResolver.setSyncAutomatically(account, authority, true);
     }
@@ -153,6 +153,7 @@ public class AccountUtils {
      * @param authority 例：{@link ContactsContract#AUTHORITY} 同步通讯录
      * @param pollFrequency 同步周期，单位s
      */
+    @RequiresPermission(WRITE_SYNC_SETTINGS)
     public static void addPeriodicSync(Account account,String authority,long pollFrequency){
         ContentResolver.addPeriodicSync(account,authority,new Bundle(),pollFrequency);
     }
