@@ -14,6 +14,8 @@ package net.nym.accountlibrary;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -22,6 +24,8 @@ import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
 import android.support.v4.app.ActivityCompat;
+
+import java.io.IOException;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 
@@ -87,6 +91,33 @@ public class AccountUtils {
     }
 
     /**
+     * 添加账户
+     * 需要检测获取权限 {@link android.Manifest.permission#GET_ACCOUNTS}
+     * @param context
+     * @return
+     */
+    public static boolean addAccount(Context context, Account account, String password,@Nullable Bundle userData){
+        AccountManager accountManager = AccountManager.get(context);
+        return accountManager.addAccountExplicitly(account,password,userData);
+    }
+
+    public static void setPassword(Context context, Account account, String password){
+        AccountManager accountManager = AccountManager.get(context);
+        accountManager.setPassword(account,password);
+    }
+
+    public static void setAuthToken(Context context, Account account, final String authTokenType, final String authToken){
+        AccountManager accountManager = AccountManager.get(context);
+        accountManager.setAuthToken(account,authTokenType,authToken);
+    }
+
+    public static String getAuthToken(Context context, Account account, final String authTokenType){
+        AccountManager accountManager = AccountManager.get(context);
+        return accountManager.peekAuthToken(account,authTokenType);
+
+    }
+
+    /**
      * 不同设备之间同步数据
      *
      * @param account
@@ -95,6 +126,16 @@ public class AccountUtils {
      */
     public static void requestSync(Account account, String authority, Bundle extras){
         ContentResolver.requestSync(account, authority, extras);
+    }
+
+    /**
+     * 设置自动同步数据
+     *
+     * @param account
+     * @param authority 例：{@link ContactsContract#AUTHORITY} 同步通讯录
+     */
+    public static void setSyncAutomatically(Account account,String authority){
+        ContentResolver.setSyncAutomatically(account, authority, true);
     }
 
     /**
@@ -107,4 +148,5 @@ public class AccountUtils {
         AccountManager accountManager = AccountManager.get(context);
         accountManager.invalidateAuthToken(accountType,authToken);
     }
+
 }
