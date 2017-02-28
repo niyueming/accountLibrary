@@ -14,18 +14,15 @@ package net.nym.accountlibrary;
 import android.Manifest;
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
+import android.accounts.AccountManagerFuture;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresPermission;
-import android.support.v4.app.ActivityCompat;
-
-import java.io.IOException;
 
 import static android.Manifest.permission.GET_ACCOUNTS;
 
@@ -101,6 +98,16 @@ public class AccountUtils {
         return accountManager.addAccountExplicitly(account,password,userData);
     }
 
+    public static boolean removeAccount(Activity context, Account account){
+        AccountManager accountManager = AccountManager.get(context);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP_MR1) {
+            return accountManager.removeAccountExplicitly(account);
+        }else {
+            AccountManagerFuture<Bundle> future = accountManager.removeAccount(account,context,null,null);
+            return true;
+        }
+    }
+
     public static void setPassword(Context context, Account account, String password){
         AccountManager accountManager = AccountManager.get(context);
         accountManager.setPassword(account,password);
@@ -136,6 +143,18 @@ public class AccountUtils {
      */
     public static void setSyncAutomatically(Account account,String authority){
         ContentResolver.setSyncAutomatically(account, authority, true);
+    }
+
+
+    /**
+     * 设置自动同步数据
+     *
+     * @param account
+     * @param authority 例：{@link ContactsContract#AUTHORITY} 同步通讯录
+     * @param pollFrequency 同步周期，单位s
+     */
+    public static void addPeriodicSync(Account account,String authority,long pollFrequency){
+        ContentResolver.addPeriodicSync(account,authority,new Bundle(),pollFrequency);
     }
 
     /**
