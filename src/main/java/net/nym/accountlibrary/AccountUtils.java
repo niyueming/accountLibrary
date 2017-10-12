@@ -119,7 +119,7 @@ public class AccountUtils {
 
     public static String getAuthToken(Context context, Account account, final String authTokenType){
         AccountManager accountManager = AccountManager.get(context);
-        return accountManager.peekAuthToken(account,authTokenType);
+        return account == null ? null : accountManager.peekAuthToken(account,authTokenType);
 
     }
 
